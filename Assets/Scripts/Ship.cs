@@ -12,6 +12,7 @@ public class Ship : MonoBehaviour
     private Rigidbody2D rb;
     private float bonusGravity = 2.0f;
     private bool reverseZone;
+    private bool isGrounded;
 
     // Start is called before the first frame update
     void Awake()
@@ -65,7 +66,7 @@ public class Ship : MonoBehaviour
                 vel.y -= bonusGravity * Time.deltaTime;
                 rb.velocity = vel;
             }
-            while (jumps > startJump);
+            while (isGrounded == false);
         }
     }
     private void reverseFly()
@@ -85,7 +86,7 @@ public class Ship : MonoBehaviour
                 vel.y -= bonusGravity * Time.deltaTime;
                 rb.velocity = vel;
             }
-            while (jumps > startJump);
+            while (isGrounded == false);
         }
     }
         
