@@ -6,14 +6,13 @@ public class Ship : MonoBehaviour
 {
     private float speed = 3.0f;
     private float flightForce = 3.0f;
-    private bool flightPhase = true;
-    private int jumps;
-    private int startJump = 0;
     private Rigidbody2D rb;
-    private float bonusGravity = 2.0f;
-    private bool reverseZone;
     private bool isGrounded;
 
+    private float flightSpeed = 3.0f;
+    private bool isFlying = false;
+    private bool isWalking = true;
+    private int FlyDirection = -1;
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,68 +25,69 @@ public class Ship : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Fly();
+        if (isWalking == true){
+            Walk();
+        }
+        if (isFlying == true){
+            Fly();
+        }
         rb.velocity = new Vector2(speed, rb.velocity.y);
 
     }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "portal")
+        if(col.gameObject.tag == "Ground")
         {
-            Fly();
-            reverseZone = false;
+            Debug.Log("JUMPABLE");
+            isGrounded = true;
         }
-        else if(col.gameObject.tag == "reverse portal")
+        else if (col.gameObject.tag == "obstacle")
+        {}
+    }
+    
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log("WORK");
+        if (col.gameObject.tag == "FlyPortal")
         {
-            reverseFly();
-
+            isFlying = true;
+            isWalking = false;
         }
-        else if(col.gameObject.tag == "obstacle")
+        else if (col.gameObject.tag == "WalkPortal")
         {
-            
+            isFlying = true;
+            isWalking = false;
         }
-        else if(col.gameObject.tag == "normalPortal")
+        Debug.Log(isFlying);
+    }
+        
+        
+    
+    private void Walk()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
         {
-            reverseZone = false;
-            flightPhase = false;
+            rb.velocity = new Vector2(speed, flightForce);
+            rb.AddForce(Vector2.up * flightForce, ForceMode2D.Impulse);
+            isGrounded = false;
         }
     }
     private void Fly()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && flightPhase == true)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = new Vector2(speed, flightForce);
-            rb.AddForce(Vector2.up * flightForce, ForceMode2D.Impulse);
-
-            do
+            if (FlyDirection == -1)
             {
-                Vector3 vel = rb.velocity;
-                vel.y -= bonusGravity * Time.deltaTime;
-                rb.velocity = vel;
+                FlyDirection = 1;
             }
-            while (isGrounded == false);
+            else {
+                FlyDirection = -1;
+            }
         }
-    }
-    private void reverseFly()
-    {
-        while(reverseZone == true)
-        {
-            rb.gravityScale = -1;
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && flightPhase == true && reverseZone == true)
-        {
-            rb.velocity = new Vector2(speed, flightForce);
-            rb.AddForce(Vector2.up * flightForce, ForceMode2D.Impulse);
 
-            do
-            {
-                Vector3 vel = rb.velocity;
-                vel.y -= bonusGravity * Time.deltaTime;
-                rb.velocity = vel;
-            }
-            while (isGrounded == false);
-        }
+        rb.velocity = new Vector2(rb.velocity.x, flightSpeed * FlyDirection);
+
     }
-        
+
 }
