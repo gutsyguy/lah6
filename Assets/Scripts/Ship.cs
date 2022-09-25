@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ship : MonoBehaviour
 {
-    private float speed = 6.0f;
-    private float flightForce = 8.0f;
+    private float speed = 6.25f;
+    private float flightForce = 5.8f;
     private Rigidbody2D rb;
 
     private float flightSpeed = 3.0f;
@@ -15,7 +16,8 @@ public class Ship : MonoBehaviour
     private int FlyDirection = -1;
 
     private int jump_count = 0;
-    private int max_jump_count = 2;
+    private int max_jump_count = 100;
+    private bool win;
     // Start is called before the first frame update
     void Awake()
     {
@@ -51,12 +53,12 @@ public class Ship : MonoBehaviour
     IEnumerator Example()
     {
         float origin_pos = rb.position.x;
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.05f);
         float new_pos = rb.position.x;
         if (origin_pos - new_pos == 0)
         {
             //PLACEHOLDER
-            Destroy(gameObject);
+            SceneManager.LoadScene(0);
         }
     }
 
@@ -70,18 +72,17 @@ public class Ship : MonoBehaviour
         }
         else if (col.gameObject.tag == "obstacle")
         {
-            //PLACEHOLDER
-            Destroy(gameObject);
+            SceneManager.LoadScene(0);
         }
         else if (col.gameObject.tag == "enemy")
         {
             if (rb.velocity.x <= 0)
             {
-                Destroy(col.gameObject);
+                SceneManager.LoadScene(0);
             }
             else
             {
-                Destroy(gameObject);
+                SceneManager.LoadScene(0);
             }
         }
     }
@@ -105,6 +106,11 @@ public class Ship : MonoBehaviour
             isFlying = false;
             isWalking = false;
             isUpside = true;
+        }
+        else if (col.gameObject.tag == "End")
+        {
+            SceneManager.LoadScene(sceneName: "s");
+
         }
     }
 

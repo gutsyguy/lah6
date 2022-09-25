@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Mouse();
+    }
+    public void Mouse()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            SceneManager.LoadScene(sceneName: "save1");
+        }
     }
 }
