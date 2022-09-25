@@ -1,12 +1,13 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Ship : MonoBehaviour
 {
-    private float speed = 6.25f;
-    private float flightForce = 5.8f;
+    private float speed = 6.26f;
+    private float flightForce = 5.0f;
     private Rigidbody2D rb;
 
     private float flightSpeed = 3.0f;
@@ -16,8 +17,7 @@ public class Ship : MonoBehaviour
     private int FlyDirection = -1;
 
     private int jump_count = 0;
-    private int max_jump_count = 100;
-    private bool win;
+    private int max_jump_count = 2;
     // Start is called before the first frame update
     void Awake()
     {
@@ -58,7 +58,8 @@ public class Ship : MonoBehaviour
         if (origin_pos - new_pos == 0)
         {
             //PLACEHOLDER
-            SceneManager.LoadScene(0);
+            Destroy(gameObject);
+            SceneManager.LoadScene(sceneName: "SampleScene");
         }
     }
 
@@ -72,17 +73,21 @@ public class Ship : MonoBehaviour
         }
         else if (col.gameObject.tag == "obstacle")
         {
-            SceneManager.LoadScene(0);
+            //PLACEHOLDER
+            Destroy(gameObject);
+            SceneManager.LoadScene(sceneName: "SampleScene");
         }
         else if (col.gameObject.tag == "enemy")
         {
             if (rb.velocity.x <= 0)
             {
-                SceneManager.LoadScene(0);
+                Destroy(col.gameObject);
+                SceneManager.LoadScene(sceneName: "SampleScene");
             }
             else
             {
-                SceneManager.LoadScene(0);
+                Destroy(gameObject);
+                SceneManager.LoadScene(sceneName: "SampleScene");
             }
         }
     }
@@ -109,8 +114,8 @@ public class Ship : MonoBehaviour
         }
         else if (col.gameObject.tag == "End")
         {
-            SceneManager.LoadScene(sceneName: "s");
 
+            SceneManager.LoadScene(sceneName: "save1");
         }
     }
 
