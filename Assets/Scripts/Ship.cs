@@ -17,7 +17,7 @@ public class Ship : MonoBehaviour
     private int FlyDirection = -1;
 
     private int jump_count = 0;
-    private int max_jump_count = 2;
+    private int max_jump_count = 100000;
     // Start is called before the first frame update
     void Awake()
     {
